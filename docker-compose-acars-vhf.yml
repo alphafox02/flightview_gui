@@ -1,0 +1,71 @@
+services:
+  acars_router:
+    container_name: acars_router
+    environment:
+    - TZ=EST
+    - AR_SEND_UDP_ACARS=acarshub:5550;52.203.186.42:27017
+    image: ghcr.io/sdr-enthusiasts/acars_router:latest
+    labels:
+    - autoheal=true
+    ports:
+    - 55555:15555
+    - 55550:15550
+    restart: always
+    tmpfs:
+    - /run:exec,size=64M
+    - /var/log
+    tty: true
+  acarsdec:
+    container_name: acarsdec
+    devices:
+    - /dev/bus/usb:/dev/bus/usb
+    environment:
+    - QUIET_LOGS=true
+    - TZ=EST
+    - SOAPYSDR=driver=rtlsdr,serial=00001090
+    - GAIN=-10
+    - PPM=0
+    - FREQUENCIES=131.550;130.025;130.425;130.450;131.125
+    - FEED_ID=Test
+    - SERVER=acars_router
+    image: ghcr.io/sdr-enthusiasts/docker-acarsdec:latest
+    restart: always
+    tmpfs:
+    - /run:exec,size=64M
+    - /var/log:size=64M
+    tty: true
+  acarshub:
+    container_name: acarshub
+    devices:
+    - /dev/bus/usb:/dev/bus/usb
+    environment:
+    - TZ=EST
+    - ENABLE_VDLM=false
+    - ENABLE_ACARS=external
+    - MIN_LOG_LEVEL=3
+    - TAR1090_URL=http://172.17.0.1:8078/
+    - IATA_OVERRIDE=UP|UPS|United Parcel Service;GS|FTH|Mountain Aviation (Foothills);GS|EJA|ExecJet
+    - ENABLE_ADSB=true
+    - ADSB_LAT=33.533746
+    - ADSB_LON=-82.130675
+    - ADSB_URL=http://172.17.0.1:8078/data/aircraft.json
+    - TAR1090_ENABLE_AC_DB=true
+    - DB_SAVEALL=
+    image: ghcr.io/sdr-enthusiasts/docker-acarshub:latest
+    ports:
+    - 80:80
+    - 5550:5550/udp
+    - 5555:5555/udp
+    - 15550:15550
+    - 15555:15555
+    restart: always
+    tmpfs:
+    - /database:exec,size=64M
+    - /run:exec,size=64M
+    - /var/log:size=64M
+    tty: true
+    volumes:
+    - acars_data:/run/acars
+version: '3.8'
+volumes:
+  acars_data: null
