@@ -26,7 +26,7 @@ services:
     - GAIN=-10
     - PPM=0
     - FREQUENCIES=131.550;130.025;130.425;130.450;131.125
-    - FEED_ID=Test
+    - FEED_ID=<uuid from your acars wallet>
     - SERVER=acars_router
     image: ghcr.io/sdr-enthusiasts/docker-acarsdec:latest
     restart: always
