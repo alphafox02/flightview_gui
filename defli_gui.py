@@ -155,7 +155,6 @@ def save_readsb_changes(file_path, new_lat, new_lon, new_tz):
 
 # Function to load the current configuration values for the acarshub service
 def load_acarshub_config(file_path, lat_entry, lon_entry, tz_entry, feed_entry):
-    print("Loading acarshub config...")
     with open(file_path, 'r') as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
@@ -164,18 +163,22 @@ def load_acarshub_config(file_path, lat_entry, lon_entry, tz_entry, feed_entry):
     tz = ''
     feed = ''  # Add a variable for FEED_ID
 
-    if 'services' in config and 'acarshub' in config['services']:
-        env = config['services']['acarshub'].get('environment', [])
-        for var in env:
-            if var.startswith('ADSB_LAT='):
-                lat = var.split('=')[1]
-            elif var.startswith('ADSB_LON='):
-                lon = var.split('=')[1]
-            elif var.startswith('TZ='):
-                tz = var.split('=')[1]
-            elif var.startswith('FEED_ID='):
-                feed = var.split('=')[1]
-                print(f"FEED_ID Value: {feed}")
+    if 'services' in config:
+        if 'acarshub' in config['services']:
+            acarshub_env = config['services']['acarshub'].get('environment', [])
+            for var in acarshub_env:
+                if var.startswith('ADSB_LAT='):
+                    lat = var.split('=')[1]
+                elif var.startswith('ADSB_LON='):
+                    lon = var.split('=')[1]
+                elif var.startswith('TZ='):
+                    tz = var.split('=')[1]
+
+        if 'acarsdec' in config['services']:
+            acarsdec_env = config['services']['acarsdec'].get('environment', [])
+            for var in acarsdec_env:
+                if var.startswith('FEED_ID='):
+                    feed = var.split('=')[1]
 
     lat_entry.delete(0, tk.END)
     lon_entry.delete(0, tk.END)
@@ -196,17 +199,22 @@ def apply_temporary_acarshub_changes(file_path, new_lat, new_lon, new_tz, new_fe
     with open(file_path, 'r') as file:
         config = yaml.safe_load(file)
 
-    if 'services' in config and 'acarshub' in config['services']:
-        env = config['services']['acarshub'].get('environment', [])
-        for i in range(len(env)):
-            if env[i].startswith('ADSB_LAT='):
-                env[i] = f'ADSB_LAT={new_lat}'
-            elif env[i].startswith('ADSB_LON='):
-                env[i] = f'ADSB_LON={new_lon}'
-            elif env[i].startswith('TZ='):
-                env[i] = f'TZ={new_tz}'
-            elif env[i].startswith('FEED_ID='):
-                env[i] = f'FEED_ID={new_feed}'
+    if 'services' in config:
+        if 'acarshub' in config['services']:
+            acarshub_env = config['services']['acarshub'].get('environment', [])
+            for i in range(len(acarshub_env)):
+                if acarshub_env[i].startswith('ADSB_LAT='):
+                    acarshub_env[i] = f'ADSB_LAT={new_lat}'
+                elif acarshub_env[i].startswith('ADSB_LON='):
+                    acarshub_env[i] = f'ADSB_LON={new_lon}'
+                elif acarshub_env[i].startswith('TZ='):
+                    acarshub_env[i] = f'TZ={new_tz}'
+
+        if 'acarsdec' in config['services']:
+            acarsdec_env = config['services']['acarsdec'].get('environment', [])
+            for i in range(len(acarsdec_env)):
+                if acarsdec_env[i].startswith('FEED_ID='):
+                    acarsdec_env[i] = f'FEED_ID={new_feed}'
 
     with open(file_path, 'w') as file:
         yaml.dump(config, file)
@@ -218,7 +226,7 @@ def start_acarshub_service(file_path, lat_entry, lon_entry, tz_entry, feed_entry
     update_running_indicator(True, running_label_3)
 
 # Function to stop the acarshub service
-def stop_acarshub_service(file_path, running_label):
+def stop_acarshub_service(file_path, running_label_3):
     subprocess.Popen(["docker", "compose", "--file", file_path, "down"])
     update_running_indicator(False, running_label_3)
 
@@ -242,6 +250,13 @@ tab3 = ttk.Frame(notebook)  # New tab for acarshub service
 notebook.add(tab1, text="Service 1 (tar1090)")
 notebook.add(tab2, text="Service 2 (readsb)")
 notebook.add(tab3, text="Service 3 (acarshub)")  # New tab for acarshub service
+
+# Function to manually set the initial focus
+def set_initial_focus(event):
+    start_button_3.focus_set()
+
+# Bind an event to the third tab to set the initial focus
+tab3.bind("<Visibility>", set_initial_focus)
 
 # Create and configure widgets for Service 1 (tar1090)
 start_button_1 = tk.Button(tab1, text="Start tar1090 Service", command=lambda: start_service("docker-compose-tar1090.yml", lat_entry, lon_entry, tz_entry, running_label))
