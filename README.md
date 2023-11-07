@@ -21,16 +21,16 @@ You can clone this repository to any directory you prefer on your local system. 
 
 ```bash
 sudo git clone https://github.com/alphafox02/acars_hub_gui.git
-
+```
 Update the Repository (Optional)
 
 If you have already cloned the repository and want to update it, navigate to the project directory and run the following command:
 
-bash
-
+```bash
 sudo git pull
+```
 
-Using the GUI
+### Using the GUI
 
 The ACARS Hub GUI offers an intuitive interface to configure and manage ACARS services. It includes three tabs for the following services:
 
