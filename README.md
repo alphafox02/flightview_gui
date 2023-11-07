@@ -20,14 +20,14 @@ To use this project, follow these steps:
 You can clone this repository to any directory you prefer on your local system. If you are on WarDragon, you can also find it in `/usr/src`.
 
 ```bash
-sudo git clone https://github.com/alphafox02/acars_hub_gui.git
+git clone https://github.com/alphafox02/acars_hub_gui.git
 ```
 Update the Repository (Optional)
 
 If you have already cloned the repository and want to update it, navigate to the project directory and run the following command:
 
 ```bash
-sudo git pull
+git pull
 ```
 
 ### Using the GUI
