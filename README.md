@@ -52,7 +52,8 @@ The ACARS Hub GUI offers an intuitive interface to configure and manage ACARS se
         Real-time service status display.
 
 Use these tabs to set basic parameters like latitude (LAT), longitude (LONG), timezone (TZ), and feed ID (FEED_ID). For advanced settings and additional configurations, you'll need to manually edit the corresponding Docker Compose YAML files. The GUI simplifies basic configurations but may not cover all advanced options.
-Access the Web Interfaces
+
+###Access the Web Interfaces
 
 After configuring the services, you can access their web interfaces as follows:
 
