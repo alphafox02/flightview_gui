@@ -237,7 +237,7 @@ def save_acarshub_changes(file_path, new_lat, new_lon, new_tz, new_feed):
 
 # Create the main window
 window = tk.Tk()
-window.title("Docker Container Manager")
+window.title("FlightView GUI")
 
 # Create a notebook for split view
 notebook = ttk.Notebook(window)
