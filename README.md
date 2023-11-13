@@ -1,8 +1,6 @@
 # FlightView GUI
 
-Welcome to the FlightView GUI repository. This project provides a user-friendly graphical interface to manage and configure Docker-based ACARS services, including `tar1090`, `readsb`, and `acarshub`. With this GUI, you can easily adjust basic settings, start and stop services, and enjoy real-time monitoring of ADSB and ACARS data.
-
-![ACARS Hub GUI](acars_hub_gui.png)
+Welcome to the FlightView GUI repository. This project provides a user-friendly graphical interface to manage and configure Docker-based aircraft related services, including `tar1090`, `readsb`, and `acarshub`. With this GUI, you can easily adjust basic settings, start and stop services, and enjoy real-time monitoring of ADSB and ACARS data.
 
 ## Getting Started
 
@@ -11,7 +9,7 @@ To use this project, follow these steps:
 ### Prerequisites
 
 - A Linux system (tested on WarDragon)
-- `docker-compose` installed
+- `docker compose` installed
 - Git (for cloning the repository)
 - One or more RTL-SDR devices (for `readsb` , `acarshub` and `dump978`)
 
