@@ -16,6 +16,7 @@ services:
     - READSB_RX_LOCATION_ACCURACY=2
     - READSB_STATS_RANGE=true
     - READSB_NET_ENABLE=true
+    #- READSB_NET_CONNECTOR=172.17.0.1,37982,beast_in
     hostname: readsb
     image: ghcr.io/sdr-enthusiasts/docker-readsb-protobuf:latest
     ports:
