@@ -13,7 +13,7 @@ To use this project, follow these steps:
 - A Linux system (tested on WarDragon)
 - `docker-compose` installed
 - Git (for cloning the repository)
-- One or more RTL-SDR devices (for `readsb` and `acarshub`)
+- One or more RTL-SDR devices (for `readsb` , `acarshub` and `dump978`)
 
 ### Clone the Repository
 
@@ -32,7 +32,7 @@ git pull
 
 ### Using the GUI
 
-The ACARS Hub GUI offers an intuitive interface to configure and manage ACARS services. It includes three tabs for the following services:
+The FlightView GUI offers an intuitive interface to configure and manage Aircraft services. It includes three tabs for the following services:
 
     tar1090 Configuration
         Configure docker-compose-tar1090.yml settings such as latitude, longitude, and timezone.
@@ -63,4 +63,4 @@ After configuring the services, you can access their web interfaces as follows:
 
 Make sure that you have the required RTL-SDR devices connected and properly recognized by your system for services that use them.
 
-Enjoy using the ACARS Hub GUI to effortlessly manage and monitor your ACARS services. If you have any questions or encounter issues, please feel free to open an issue in this repository.
+Enjoy using the FlightView GUI to effortlessly manage and monitor your aircraft services. If you have any questions or encounter issues, please feel free to open an issue in this repository.
