@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  deflimongodb:
+    build:
+      context: https://github.com/alphafox02/docker-deflimongodb.git
+    container_name: deflimongodb
+    environment:
+      # Add your environment variables here if needed
+     restart: always # Remove or comment this line if you don't want automatic restart
