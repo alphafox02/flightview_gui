@@ -14,4 +14,13 @@ services:
     environment:
       - DUMP978_RTLSDR_DEVICE=00001090
       - DUMP978_SDR_GAIN=autogain
-    restart: always
+    restart: unless-stopped
+    labels:
+      - "autoheal=true"
+    volumes:
+      - /opt/adsb/dump978:/var/globe_history
+      - /dev:/dev:ro
+    tmpfs:
+      - /run:exec,size=64M
+      - /tmp:size=64M
+      - /var/log:size=32M
