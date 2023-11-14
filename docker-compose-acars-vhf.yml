@@ -4,6 +4,8 @@ services:
     environment:
     - TZ="America/New_York"
     - AR_SEND_UDP_ACARS=acarshub:5550;52.203.186.42:27017
+    # uncomment the line below when you're ready to add vdlm2
+    #- AR_SEND_UDP_VDLM2=acarshub:5555 
     image: ghcr.io/sdr-enthusiasts/acars_router:latest
     labels:
     - autoheal=true
@@ -40,6 +42,7 @@ services:
     - /dev/bus/usb:/dev/bus/usb
     environment:
     - TZ=EST
+    # change this to external when you enable vdlm
     - ENABLE_VDLM=false
     - ENABLE_ACARS=external
     - MIN_LOG_LEVEL=3
