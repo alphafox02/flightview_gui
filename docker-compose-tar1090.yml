@@ -2,7 +2,7 @@ services:
   tar1090:
     container_name: tar1090
     environment:
-    - TZ=EST
+    - TZ="America/New_York"
     - BEASTHOST=readsb
     - MLATHOST=adsbx
     - LAT=33.533746
