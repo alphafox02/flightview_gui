@@ -4,7 +4,7 @@ services:
     devices:
     - /dev/bus/usb:/dev/bus/usb
     environment:
-    - TZ=EST
+    - TZ="America/New_York"
     - READSB_DCFILTER=true
     - READSB_DEVICE_TYPE=rtlsdr
     - READSB_RTLSDR_DEVICE=0
