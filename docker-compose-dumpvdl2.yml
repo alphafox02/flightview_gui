@@ -8,7 +8,6 @@ services:
     restart: unless-stopped
     devices:
       - /dev/bus/usb:/dev/bus/usb
-    ports:
     environment:
       - TZ="America/New_York"
       - SERIAL=00001090
