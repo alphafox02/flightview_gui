@@ -1,0 +1,19 @@
+version: "2.0"
+
+services:
+  dumpvdl2:
+    image: ghcr.io/sdr-enthusiasts/docker-dumpvdl2:latest
+    tty: true
+    container_name: dumpvdl2
+    restart: unless-stopped
+    devices:
+      - /dev/bus/usb:/dev/bus/usb
+    ports:
+    environment:
+      - TZ="America/New_York"
+      - SERIAL=00001090
+      - FEED_ID=VDLM
+      - FREQUENCIES=136725000;136975000;136875000
+    tmpfs:
+      - /run:exec,size=64M
+      - /var/log
