@@ -2,7 +2,7 @@ services:
   acars_router:
     container_name: acars_router
     environment:
-    - TZ=EST
+    - TZ="America/New_York"
     - AR_SEND_UDP_ACARS=acarshub:5550;52.203.186.42:27017
     image: ghcr.io/sdr-enthusiasts/acars_router:latest
     labels:
@@ -21,7 +21,7 @@ services:
     - /dev/bus/usb:/dev/bus/usb
     environment:
     - QUIET_LOGS=true
-    - TZ=EST
+    - TZ="America/New_York"
     - SOAPYSDR=driver=rtlsdr,serial=00001090
     - GAIN=-10
     - PPM=0
