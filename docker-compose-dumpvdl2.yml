@@ -13,6 +13,7 @@ services:
       - SERIAL=00001090
       - FEED_ID=VDLM
       - FREQUENCIES=136650000;136975000;136700000;136800000
+      - SERVER=acars_router
     tmpfs:
       - /run:exec,size=64M
       - /var/log
