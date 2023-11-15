@@ -9,14 +9,14 @@ To use this project, follow these steps:
 ### Prerequisites
 
 - A Linux system (tested on WarDragon)
-- Docker Compose (minimum version X.X.X)
+- Docker Compose
 - Docker installed
 - Git (for cloning the repository)
 - One or more RTL-SDR devices (for `readsb`, `acarshub`, and `dump978`)
 
 ### Set up Docker's apt repository
 
-First, set up Docker's apt repository. Open a terminal and run the following commands:
+First, set up Docker's apt repository. These steps are already completed on the WarDragon. Open a terminal and run the following commands:
 
 ```bash
 # Add Docker's official GPG key:
