@@ -19,8 +19,8 @@ services:
     tty: true
   acarsdec:
     container_name: acarsdec
-    devices:
-    - /dev/bus/usb:/dev/bus/usb
+    device_cgroup_rules:
+    - 'c 189:* rwm'
     environment:
     - QUIET_LOGS=true
     - TZ="America/New_York"
@@ -36,12 +36,12 @@ services:
     - /run:exec,size=64M
     - /var/log:size=64M
     tty: true
+    volumes:
+    - /dev:/dev:ro
   acarshub:
     container_name: acarshub
-    devices:
-    - /dev/bus/usb:/dev/bus/usb
     environment:
-    - TZ=EST
+    - TZ="America/New_York"
     # change this to external when you enable vdlm
     - ENABLE_VDLM=false
     - ENABLE_ACARS=external
