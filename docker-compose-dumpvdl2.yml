@@ -6,8 +6,8 @@ services:
     tty: true
     container_name: dumpvdl2
     restart: unless-stopped
-    devices:
-      - /dev/bus/usb:/dev/bus/usb
+    device_cgroup_rules:
+      - 'c 189:* rwm'
     environment:
       - TZ="America/New_York"
       - SERIAL=00001090
@@ -17,3 +17,7 @@ services:
     tmpfs:
       - /run:exec,size=64M
       - /var/log
+    volumes:
+      - /dev:/dev:ro
+
+    
