@@ -1,8 +1,8 @@
 services:
   readsb:
     container_name: readsb
-    devices:
-    - /dev/bus/usb:/dev/bus/usb
+    device_cgroup_rules:
+    - 'c 189:* rwm'
     environment:
     - TZ="America/New_York"
     - READSB_DCFILTER=true
@@ -32,6 +32,7 @@ services:
     - readsbpb_rrd:/run/collectd
     - readsbpb_autogain:/run/autogain
     - /proc/diskstats:/proc/diskstats:ro
+    - /dev:/dev:ro
 version: '2.0'
 volumes:
   readsbpb_autogain: null
