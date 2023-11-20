@@ -9,8 +9,8 @@ services:
       - "30980:80"
       - "37981:37981"
       - "37982:37982"
-    devices:
-      - "/dev/bus/usb:/dev/bus/usb"
+    device_cgroup_rules:
+    - 'c 189:* rwm'
     environment:
       - DUMP978_RTLSDR_DEVICE=00001090
       - DUMP978_SDR_GAIN=autogain
