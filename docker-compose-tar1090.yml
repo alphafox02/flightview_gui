@@ -7,9 +7,12 @@ services:
     - MLATHOST=adsbx
     - LAT=33.533746
     - LONG=-82.130675
+    - READSB_NET_SBS_OUTPUT_PORT=30003
+    - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce
     image: ghcr.io/sdr-enthusiasts/docker-tar1090:latest
     ports:
     - 8078:80
+    - 30003:30003
     restart: unless-stopped
     tmpfs:
     - /run:exec,size=64M
