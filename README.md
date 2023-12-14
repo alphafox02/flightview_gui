@@ -43,7 +43,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 You can clone this repository to any directory you prefer on your local system. If you are on WarDragon, you can also find it in `/usr/src`.
 
 ```bash
-git clone https://github.com/alphafox02/acars_hub_gui.git
+git clone https://github.com/alphafox02/flightview_gui.git
 ```
 
 #### Update the Repository (Optional)
