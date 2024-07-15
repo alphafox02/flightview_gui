@@ -3,7 +3,7 @@ services:
     container_name: acars_router
     environment:
     - TZ="America/New_York"
-    - AR_SEND_UDP_ACARS=acarshub:5550;52.203.186.42:27017
+    - AR_SEND_UDP_ACARS=acarshub:5550
     # uncomment the line below when you're ready to add vdlm2
     #- AR_SEND_UDP_VDLM2=acarshub:5555 
     image: ghcr.io/sdr-enthusiasts/acars_router:latest
