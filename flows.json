@@ -1,0 +1,104 @@
+[
+    {
+        "id": "f6f2187d.f17ca8",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "3cc11d24.ff01a2",
+        "type": "comment",
+        "z": "f6f2187d.f17ca8",
+        "name": "WARNING: please check you have started this container with a volume that is mounted to /data\\n otherwise any flow changes are lost when you redeploy or upgrade the container\\n (e.g. upgrade to a more recent node-red docker image).\\n  If you are using named volumes you can ignore this warning.\\n Double click or see info side panel to learn how to start Node-RED in Docker to save your work",
+        "info": "\nTo start docker with a bind mount volume (-v option), for example:\n\n```\ndocker run -it -p 1880:1880 -v /home/user/node_red_data:/data --name mynodered nodered/node-red\n```\n\nwhere `/home/user/node_red_data` is a directory on your host machine where you want to store your flows.\n\nIf you do not do this then you can experiment and redploy flows, but if you restart or upgrade the container the flows will be disconnected and lost. \n\nThey will still exist in a hidden data volume, which can be recovered using standard docker techniques, but that is much more complex than just starting with a named volume as described above.",
+        "x": 350,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "cca5006d91f9f3f6",
+        "type": "zeromq in",
+        "z": "f6f2187d.f17ca8",
+        "d": true,
+        "name": "ZeroMQ In",
+        "topic": "",
+        "fields": "",
+        "server": "tcp://172.17.0.1:12345",
+        "output": "json",
+        "isserver": false,
+        "intype": "sub",
+        "x": 120,
+        "y": 240,
+        "wires": [
+            [
+                "826f8abfb2d0c149"
+            ]
+        ]
+    },
+    {
+        "id": "826f8abfb2d0c149",
+        "type": "function",
+        "z": "f6f2187d.f17ca8",
+        "name": "Process JSON",
+        "func": "// Initialize or retrieve the existing global map of drone locations\nlet droneLocations = global.get('droneLocations') || {};\nlet lastProcessedTimes = global.get('lastProcessedTimes') || {};\n\n// Function to get the current timestamp in seconds\nfunction getCurrentTimestamp() {\n    return Math.floor(Date.now() / 1000);\n}\n\n// Check if msg.part0 exists and is an array\nif (msg.part0 && Array.isArray(msg.part0)) {\n    // Iterate over the incoming messages\n    msg.part0.forEach((data) => {\n        let id = null;\n\n        // Extract and process the Basic ID\n        if (data[\"Basic ID\"]) {\n            id = data[\"Basic ID\"].id;\n            droneLocations[id] = droneLocations[id] || {};\n            droneLocations[id][\"Basic ID\"] = data[\"Basic ID\"];\n        }\n\n        // Determine the ID if not already determined\n        if (!id) {\n            id = Object.keys(droneLocations).find(id => droneLocations[id][\"Basic ID\"]);\n        }\n\n        if (id) {\n            let currentTime = getCurrentTimestamp();\n            let lastProcessedTime = lastProcessedTimes[id] || 0;\n\n            // Only process if at least 5 seconds have passed since the last update for this ID\n            if (currentTime - lastProcessedTime >= 10) {\n                lastProcessedTimes[id] = currentTime;\n\n                // Extract and process the Location/Vector Message\n                if (data[\"Location/Vector Message\"]) {\n                    droneLocations[id][\"Location/Vector Message\"] = data[\"Location/Vector Message\"];\n                }\n\n                // Extract and process the System Message\n                if (data[\"System Message\"]) {\n                    droneLocations[id][\"System Message\"] = data[\"System Message\"];\n                }\n\n                // Extract and process the Self-ID Message\n                if (data[\"Self-ID Message\"]) {\n                    droneLocations[id][\"Self-ID Message\"] = data[\"Self-ID Message\"];\n                }\n            }\n        }\n    });\n} else {\n    // Log a warning message\n    node.warn(\"msg.part0 is not an array or is undefined\");\n}\n\n// Prepare the payload for the worldmap node\nlet mapPoints = [];\nfor (let id in droneLocations) {\n    let locationMessage = droneLocations[id][\"Location/Vector Message\"];\n    let systemMessage = droneLocations[id][\"System Message\"];\n    let basicID = droneLocations[id][\"Basic ID\"];\n    let selfID = droneLocations[id][\"Self-ID Message\"];\n    let popup = \"<b>Drone Info:</b><br>\";\n    \n    if (basicID) {\n        popup += `ID: ${basicID.id}<br>`;\n        popup += `Type: ${basicID.ua_type}<br>`;\n    }\n    \n    if (locationMessage) {\n        popup += `Op Status: ${locationMessage.op_status}<br>`;\n        popup += `Height Type: ${locationMessage.height_type}<br>`;\n        popup += `Latitude: ${locationMessage.latitude}<br>`;\n        popup += `Longitude: ${locationMessage.longitude}<br>`;\n        popup += `Altitude: ${locationMessage.geodetic_altitude}<br>`;\n    }\n    \n    if (systemMessage) {\n        popup += `Latitude: ${systemMessage.latitude}<br>`;\n        popup += `Longitude: ${systemMessage.longitude}<br>`;\n        popup += `Altitude: ${systemMessage.geodetic_altitude}<br>`;\n    }\n\n    if (selfID) {\n        popup += `Text: ${selfID.text}<br>`;\n    }\n    \n    if (locationMessage) {\n        mapPoints.push({\n            name: id,\n            lat: locationMessage.latitude,\n            lon: locationMessage.longitude,\n            icon: \"fa-plane\",\n            layer: \"Drones\",\n            popup: popup\n        });\n    } else if (systemMessage) {\n        mapPoints.push({\n            name: id,\n            lat: systemMessage.latitude,\n            lon: systemMessage.longitude,\n            icon: \"fa-plane\",\n            layer: \"Drones\",\n            popup: popup\n        });\n    }\n}\n\n// Save the updated locations and last processed times to global context\nglobal.set('droneLocations', droneLocations);\nglobal.set('lastProcessedTimes', lastProcessedTimes);\n\n// Pass the map points to the next node\nmsg.payload = mapPoints;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "d6559759079378f9",
+                "d5c7b9fb155994e2"
+            ]
+        ]
+    },
+    {
+        "id": "d6559759079378f9",
+        "type": "debug",
+        "z": "f6f2187d.f17ca8",
+        "name": "Debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 520,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "d5c7b9fb155994e2",
+        "type": "worldmap",
+        "z": "f6f2187d.f17ca8",
+        "name": "",
+        "lat": "0",
+        "lon": "0",
+        "zoom": "",
+        "layer": "OSMG",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "false",
+        "hiderightclick": "false",
+        "coords": "none",
+        "path": "/worldmap",
+        "overlist": "DR,CO,RA,DN,HM",
+        "maplist": "OSMG,OSMC,EsriC,EsriS,EsriT,EsriO,EsriDG,NatGeo,UKOS,OpTop",
+        "mapname": "",
+        "mapurl": "",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 520,
+        "y": 260,
+        "wires": []
+    }
+]
