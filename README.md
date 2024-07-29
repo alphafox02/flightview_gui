@@ -96,7 +96,6 @@ The Docker Compose YAML files in this project pull in the following Docker image
 - [Dump978](https://github.com/sdr-enthusiasts/docker-dump978)
 - [DumpVDL2](https://github.com/sdr-enthusiasts/docker-dumpvdl2)
 - [Tar1090](https://github.com/sdr-enthusiasts/docker-tar1090)
-- [DefliMongoDB](https://github.com/alphafox02/docker-deflimongodb)
 
 Explore these repositories to learn more about each component and contribute to their development.
 
