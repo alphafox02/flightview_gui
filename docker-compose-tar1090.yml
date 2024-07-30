@@ -3,7 +3,7 @@ services:
     container_name: tar1090
     environment:
     - TZ="America/New_York"
-    - BEASTHOST=airspy_adsb
+    - BEASTHOST=readsb
     - MLATHOST=adsbx
     - LAT=33.533746
     - LONG=-82.130675
