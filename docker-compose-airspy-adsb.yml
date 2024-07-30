@@ -1,0 +1,26 @@
+services:
+  airspy_adsb:
+    image: ghcr.io/sdr-enthusiasts/airspy_adsb:latest
+    tty: true
+    container_name: airspy_adsb
+    hostname: airspy_adsb
+    restart: always
+    device_cgroup_rules:
+      - 'c 189:* rwm'
+    environment:
+      - AIRSPY_ADSB_VERBOSE=true
+      - AIRSPY_ADSB_TIMEOUT=90
+      - AIRSPY_ADSB_FEC_BITS=1
+      - AIRSPY_ADSB_WHITELIST_THRESHOLD=5
+      - AIRSPY_ADSB_PREAMBLE_FILTER_NONCRC=8
+      - AIRSPY_ADSB_CPUTIME_TARGET=60
+      - AIRSPY_ADSB_PREAMBLE_FILTER_MAX=20
+      - AIRSPY_ADSB_MLAT_FREQ=12
+      - AIRSPY_ADSB_RF_GAIN=auto
+      - AIRSPY_ADSB_STATS=true
+    volumes:
+      - /dev:/dev:ro
+    tmpfs:
+      - /run:exec,size=256M
+      - /tmp:size=128M
+      - /var/log:size=32M
