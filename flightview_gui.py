@@ -54,6 +54,24 @@ def load_current_config(file_path, lat_entry, lon_entry, tz_entry):
     lon_entry.insert(0, lon)
     tz_entry.insert(0, tz)
 
+# Function to apply temporary changes to a Docker service configuration
+def apply_temporary_changes(file_path, new_lat, new_lon, new_tz):
+    with open(file_path, 'r') as file:
+        config = yaml.safe_load(file)
+
+    for service in config['services']:
+        env = config['services'][service].get('environment', [])
+        for i in range(len(env)):
+            if env[i].startswith('LAT='):
+                env[i] = f'LAT={new_lat}'
+            elif env[i].startswith('LONG='):
+                env[i] = f'LONG={new_lon}'
+            elif env[i].startswith('TZ='):
+                env[i] = f'TZ={new_tz}'
+
+    with open(file_path, 'w') as file:
+        yaml.dump(config, file)
+
 # Check for sudo privileges before running the script
 if not check_sudo():
     print("This script requires sudo privileges. Please run it with sudo.")
