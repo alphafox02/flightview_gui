@@ -13,34 +13,6 @@ def check_sudo():
         return False
     return True
 
-# Function to load the current configuration values for a Docker service
-def load_current_config(file_path, lat_entry, lon_entry, tz_entry):
-    with open(file_path, 'r') as file:
-        config = yaml.load(file, Loader=yaml.FullLoader)
-
-    lat = ''
-    lon = ''
-    tz = ''
-
-    if 'services' in config:
-        for service in config['services']:
-            env = config['services'][service].get('environment', [])
-            for var in env:
-                if var.startswith('LAT='):
-                    lat = var.split('=')[1]
-                elif var.startswith('LONG='):
-                    lon = var.split('=')[1]
-                elif var.startswith('TZ='):
-                    tz = var.split('=')[1]
-
-    lat_entry.delete(0, tk.END)
-    lon_entry.delete(0, tk.END)
-    tz_entry.delete(0, tk.END)
-
-    lat_entry.insert(0, lat)
-    lon_entry.insert(0, lon)
-    tz_entry.insert(0, tz)
-
 # Function to check if a Docker service is running
 def is_service_running(service_name):
     result = subprocess.run(["docker", "ps", "--format", "{{.Names}}"], stdout=subprocess.PIPE)
@@ -58,24 +30,6 @@ def update_running_indicator(service_name, running_label):
 if not check_sudo():
     print("This script requires sudo privileges. Please run it with sudo.")
     sys.exit(1)
-
-# Function to apply temporary changes to a Docker service configuration
-def apply_temporary_changes(file_path, new_lat, new_lon, new_tz):
-    with open(file_path, 'r') as file:
-        config = yaml.safe_load(file)
-
-    for service in config['services']:
-        env = config['services'][service].get('environment', [])
-        for i in range(len(env)):
-            if env[i].startswith('LAT='):
-                env[i] = f'LAT={new_lat}'
-            elif env[i].startswith('LONG='):
-                env[i] = f'LONG={new_lon}'
-            elif env[i].startswith('TZ='):
-                env[i] = f'TZ={new_tz}'
-
-    with open(file_path, 'w') as file:
-        yaml.dump(config, file)
 
 # Function to start a Docker service
 def start_service(file_path, lat_entry, lon_entry, tz_entry, running_label):
@@ -102,10 +56,6 @@ def stop_airspy_service(file_path, running_label):
     time.sleep(1)  # Adding a small delay to allow Docker to stop the service
     update_running_indicator("airspy_adsb", running_label)
 
-# Function to save changes for the airspy_adsb service configuration
-def save_airspy_changes(file_path):
-    pass  # No changes to apply for airspy_adsb
-
 # Function to load the current configuration values for the airspy_adsb service
 def load_airspy_adsb_config(file_path):
     pass  # No environment variables to load for airspy_adsb
@@ -128,7 +78,6 @@ notebook.add(tab2, text="Service 2 (tar1090)")
 # Create and configure widgets for Service 1 (airspy_adsb)
 start_button_1 = tk.Button(tab1, text="Start airspy_adsb Service", command=lambda: start_airspy_service("docker-compose-airspy-adsb.yml", running_label_1))
 stop_button_1 = tk.Button(tab1, text="Stop airspy_adsb Service", command=lambda: stop_airspy_service("docker-compose-airspy-adsb.yml", running_label_1))
-save_button_1 = tk.Button(tab1, text="Save Changes", command=lambda: save_airspy_changes("docker-compose-airspy-adsb.yml"))
 running_label_1 = tk.Label(tab1, text="Not Running", foreground="red")
 
 # Load and display the current configuration values for Service 1 (airspy_adsb)
@@ -138,8 +87,7 @@ update_running_indicator("airspy_adsb", running_label_1)
 # Arrange widgets for Service 1 (airspy_adsb)
 start_button_1.grid(row=0, column=0, padx=10, pady=10)
 stop_button_1.grid(row=0, column=1, padx=10, pady=10)
-save_button_1.grid(row=0, column=2, padx=10, pady=10)
-running_label_1.grid(row=1, column=0, columnspan=3, padx=10, pady=10)
+running_label_1.grid(row=1, column=0, columnspan=2, padx=10, pady=10)
 
 # Create and configure widgets for Service 2 (tar1090)
 start_button_2 = tk.Button(tab2, text="Start tar1090 Service", command=lambda: start_service("docker-compose-tar1090.yml", lat_entry, lon_entry, tz_entry, running_label_2))
@@ -171,3 +119,4 @@ running_label_2.grid(row=4, column=1, padx=10, pady=10)
 
 # Start the GUI event loop
 window.mainloop()
+
