@@ -18,16 +18,12 @@ def is_service_running(service_name):
     result = subprocess.run(["docker", "ps", "--format", "{{.Names}}"], stdout=subprocess.PIPE)
     return service_name in result.stdout.decode().splitlines()
 
-# Function to update the running indicator with a retry mechanism
-def update_running_indicator(service_name, running_label, retries=3, delay=1):
-    for _ in range(retries):
-        if is_service_running(service_name):
-            running_label.config(text="Running", foreground="green")
-        else:
-            running_label.config(text="Not Running", foreground="red")
-            return
-        time.sleep(delay)  # Wait before retrying
-    running_label.config(text="Not Running", foreground="red")  # Final fallback to "Not Running"
+# Function to update the running indicator
+def update_running_indicator(service_name, running_label):
+    if is_service_running(service_name):
+        running_label.config(text="Running", foreground="green")
+    else:
+        running_label.config(text="Not Running", foreground="red")
 
 # Function to load the current configuration values for a Docker service
 def load_current_config(file_path, lat_entry, lon_entry, tz_entry):
@@ -88,26 +84,26 @@ if not check_sudo():
 def start_service(file_path, lat_entry, lon_entry, tz_entry, running_label):
     apply_temporary_changes(file_path, lat_entry.get(), lon_entry.get(), tz_entry.get())
     subprocess.Popen(["docker", "compose", "--file", file_path, "up", "-d"])
-    time.sleep(2)  # Adding a slightly longer delay to allow Docker to start the service
+    time.sleep(2)  # Adding a slight delay to allow Docker to start the service
     update_running_indicator(file_path.split('-')[2].split('.')[0], running_label)
 
 # Function to stop a Docker service
 def stop_service(file_path, running_label):
     subprocess.Popen(["docker", "compose", "--file", file_path, "down"])
-    time.sleep(2)  # Adding a slightly longer delay to allow Docker to stop the service
-    update_running_indicator(file_path.split('-')[2].split('.')[0], running_label, retries=5, delay=2)
+    time.sleep(2)  # Adding a slight delay to allow Docker to stop the service
+    update_running_indicator(file_path.split('-')[2].split('.')[0], running_label)
 
 # Function to start the airspy_adsb service
 def start_airspy_service(file_path, running_label):
     subprocess.Popen(["docker", "compose", "--file", file_path, "up", "-d"])
-    time.sleep(2)  # Adding a slightly longer delay to allow Docker to start the service
+    time.sleep(2)  # Adding a slight delay to allow Docker to start the service
     update_running_indicator("airspy_adsb", running_label)
 
 # Function to stop the airspy_adsb service
 def stop_airspy_service(file_path, running_label):
     subprocess.Popen(["docker", "compose", "--file", file_path, "down"])
-    time.sleep(2)  # Adding a slightly longer delay to allow Docker to stop the service
-    update_running_indicator("airspy_adsb", running_label, retries=5, delay=2)
+    time.sleep(2)  # Adding a slight delay to allow Docker to stop the service
+    update_running_indicator("airspy_adsb", running_label)
 
 # Function to load the current configuration values for the airspy_adsb service
 def load_airspy_adsb_config(file_path):
