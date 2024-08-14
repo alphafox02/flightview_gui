@@ -26,6 +26,34 @@ def update_running_indicator(service_name, running_label):
     else:
         running_label.config(text="Not Running", foreground="red")
 
+# Function to load the current configuration values for a Docker service
+def load_current_config(file_path, lat_entry, lon_entry, tz_entry):
+    with open(file_path, 'r') as file:
+        config = yaml.load(file, Loader=yaml.FullLoader)
+
+    lat = ''
+    lon = ''
+    tz = ''
+
+    if 'services' in config:
+        for service in config['services']:
+            env = config['services'][service].get('environment', [])
+            for var in env:
+                if var.startswith('LAT='):
+                    lat = var.split('=')[1]
+                elif var.startswith('LONG='):
+                    lon = var.split('=')[1]
+                elif var.startswith('TZ='):
+                    tz = var.split('=')[1]
+
+    lat_entry.delete(0, tk.END)
+    lon_entry.delete(0, tk.END)
+    tz_entry.delete(0, tk.END)
+
+    lat_entry.insert(0, lat)
+    lon_entry.insert(0, lon)
+    tz_entry.insert(0, tz)
+
 # Check for sudo privileges before running the script
 if not check_sudo():
     print("This script requires sudo privileges. Please run it with sudo.")
@@ -119,4 +147,3 @@ running_label_2.grid(row=4, column=1, padx=10, pady=10)
 
 # Start the GUI event loop
 window.mainloop()
-
