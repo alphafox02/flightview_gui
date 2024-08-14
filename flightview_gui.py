@@ -90,8 +90,14 @@ def start_service(file_path, lat_entry, lon_entry, tz_entry, running_label):
 # Function to stop a Docker service
 def stop_service(file_path, running_label):
     subprocess.Popen(["docker", "compose", "--file", file_path, "down"])
-    time.sleep(2)  # Adding a slight delay to allow Docker to stop the service
-    update_running_indicator(file_path.split('-')[2].split('.')[0], running_label)
+    # Wait until the service stops completely
+    service_name = file_path.split('-')[2].split('.')[0]
+    timeout = 15  # Maximum wait time in seconds
+    for _ in range(timeout):
+        if not is_service_running(service_name):
+            break
+        time.sleep(1)
+    update_running_indicator(service_name, running_label)
 
 # Function to start the airspy_adsb service
 def start_airspy_service(file_path, running_label):
@@ -102,7 +108,12 @@ def start_airspy_service(file_path, running_label):
 # Function to stop the airspy_adsb service
 def stop_airspy_service(file_path, running_label):
     subprocess.Popen(["docker", "compose", "--file", file_path, "down"])
-    time.sleep(2)  # Adding a slight delay to allow Docker to stop the service
+    # Wait until the service stops completely
+    timeout = 15  # Maximum wait time in seconds
+    for _ in range(timeout):
+        if not is_service_running("airspy_adsb"):
+            break
+        time.sleep(1)
     update_running_indicator("airspy_adsb", running_label)
 
 # Function to load the current configuration values for the airspy_adsb service
