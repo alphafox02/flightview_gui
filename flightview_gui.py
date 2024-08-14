@@ -72,6 +72,10 @@ def apply_temporary_changes(file_path, new_lat, new_lon, new_tz):
     with open(file_path, 'w') as file:
         yaml.dump(config, file)
 
+# Function to save changes to a Docker service configuration
+def save_changes(file_path, new_lat, new_lon, new_tz):
+    apply_temporary_changes(file_path, new_lat, new_lon, new_tz)
+
 # Check for sudo privileges before running the script
 if not check_sudo():
     print("This script requires sudo privileges. Please run it with sudo.")
