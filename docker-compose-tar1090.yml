@@ -12,7 +12,7 @@ services:
     - READSB_AUTOGAIN_SUBSEQUENT_INTERVAL=1200
     - LAT=33.533746
     - LONG=-82.130675
-    - ULTRAFEEDER_CONFIG=adsb,dump978,30978,uat_in,silent_fail
+    - ULTRAFEEDER_CONFIG=adsb,dump978,30978,uat_in
     - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce
     image: ghcr.io/sdr-enthusiasts/docker-adsb-ultrafeeder:latest
     ports:
