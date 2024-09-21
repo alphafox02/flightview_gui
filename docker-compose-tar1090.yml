@@ -7,8 +7,9 @@ services:
     - TZ="America/New_York"
     - LAT=33.533746
     - LONG=-82.130675
-    - ULTRAFEEDER_CONFIG=adsb,airspy_adsb,dump978,30978,uat_in,silent_fail
-    - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce
+    - ULTRAFEEDER_CONFIG=
+      adsb,airspy_adsb,30005,beast_in;
+      adsb,dump978,30978,uat_in,silent_fail;
     image: ghcr.io/sdr-enthusiasts/docker-adsb-ultrafeeder:latest
     ports:
     - 8078:80
