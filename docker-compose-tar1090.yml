@@ -9,7 +9,7 @@ services:
     - LONG=-82.130675
     - ULTRAFEEDER_CONFIG=
       adsb,airspy_adsb,30005,beast_in;
-      adsb,dump978,30978,uat_in,silent_fail;
+      adsb,dump978,30978,uat_in;
     - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce
     - ENABLE_AIRSPY=true
     - URL_AIRSPY=http://airspy_adsb/
