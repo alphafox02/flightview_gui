@@ -1,24 +1,27 @@
 services:
   tar1090:
     container_name: tar1090
+    device_cgroup_rules:
+    - 'c 189:* rwm'
     environment:
     - TZ="America/New_York"
-    - BEASTHOST=airspy_adsb
-    - MLATHOST=adsbx
     - LAT=33.533746
     - LONG=-82.130675
-    - READSB_NET_SBS_OUTPUT_PORT=30003
+    - ULTRAFEEDER_CONFIG=adsb,airspy_adsb,dump978,30978,uat_in,silent_fail
     - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce
-    image: ghcr.io/sdr-enthusiasts/docker-tar1090:latest
+    image: ghcr.io/sdr-enthusiasts/docker-adsb-ultrafeeder:latest
     ports:
     - 8078:80
     - 30003:30003
+    - 30005:30005
     restart: unless-stopped
     tmpfs:
-    - /run:exec,size=64M
+    - /run:exec,size=128M
     - /var/log
     tty: true
     volumes:
+    - /dev:/dev:ro
+    - /usr/local/share/osm_tiles_offline:/usr/local/share/osm_tiles_offline
     - /opt/adsb/tar1090/globe_history:/var/globe_history
     - /opt/adsb/tar1090/timelapse1090:/var/timelapse1090
     - /opt/adsb/tar1090/graphs1090:/var/lib/collectd
