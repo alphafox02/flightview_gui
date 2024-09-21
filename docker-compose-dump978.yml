@@ -12,7 +12,7 @@ services:
     device_cgroup_rules:
       - 'c 189:* rwm'
     environment:
-      - DUMP978_RTLSDR_DEVICE=00001090
+      - DUMP978_RTLSDR_DEVICE=978
       - DUMP978_SDR_GAIN=autogain
     restart: unless-stopped
     labels:
