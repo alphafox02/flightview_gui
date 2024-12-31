@@ -16,7 +16,6 @@ services:
     tmpfs:
     - /run:exec,size=64M
     - /var/log
-    tty: true
   acarsdec:
     container_name: acarsdec
     device_cgroup_rules:
