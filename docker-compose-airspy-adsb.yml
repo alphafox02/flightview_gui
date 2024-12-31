@@ -1,7 +1,6 @@
 services:
   airspy_adsb:
     image: ghcr.io/sdr-enthusiasts/airspy_adsb:latest
-    tty: true
     container_name: airspy_adsb
     hostname: airspy_adsb
     restart: unless-stopped
