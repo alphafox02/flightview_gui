@@ -21,8 +21,6 @@ services:
     restart: unless-stopped
     tmpfs:
     - /run:exec,size=128M
-    - /var/log
-    tty: true
     volumes:
     - /dev:/dev:ro
     - /usr/local/share/osm_tiles_offline:/usr/local/share/osm_tiles_offline
