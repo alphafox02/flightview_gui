@@ -7,6 +7,7 @@ services:
     - TZ="America/New_York"
     - LAT=33.533746
     - LONG=-82.130675
+    - 'TAR1090_CONFIGJS_APPEND=droneJson="./data/drone.json";'
     - ULTRAFEEDER_CONFIG=
       adsb,airspy_adsb,30005,beast_in;
     - READSB_EXTRA_ARGS=--net-beast-reduce-interval 2 --net-sbs-reduce --net-connector=dump978,30978,uat_in,silent_fail
@@ -29,4 +30,5 @@ services:
     - /opt/adsb/tar1090/timelapse1090:/var/timelapse1090
     - /opt/adsb/tar1090/graphs1090:/var/lib/collectd
     - /proc/diskstats:/proc/diskstats:ro
+    - /run/readsb:/run/readsb
 version: '3.8'
